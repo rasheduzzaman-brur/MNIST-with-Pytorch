@@ -48,7 +48,7 @@ def main():
                         help='input batch size for testing')
     parser.add_argument('--epochs', type=int, default=10,
                         help='number of epochs to train')
-    parser.add_argument('--lr', type=float, default=.1,
+    parser.add_argument('--lr', type=float, default=1,
                         help='learning rate ')
     parser.add_argument('--gamma', type=float, default=0.7,
                         help='Learning rate step gamma')
@@ -56,7 +56,7 @@ def main():
                         help='CUDA ues for training')
     parser.add_argument('--log-interval', type=int, default=10,
                         help='how many batches to wait before logging training status')
-    parser.add_argument('--save-model', action='store_true', default=False,
+    parser.add_argument('--save-model', action='store_true', default=True,
                         help='For Saving the current Model')
     args = parser.parse_args()
 
@@ -76,7 +76,7 @@ def main():
 
     train_loader, test_loader = dataset(train_args,test_args)
     model = Network().to(device)
-    optimizer = optim.Adam(model.parameters(), lr=args.lr)
+    optimizer = optim.Adadelta(model.parameters(), lr=args.lr)
     scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
 
     for epoch in range(1, args.epochs + 1):
